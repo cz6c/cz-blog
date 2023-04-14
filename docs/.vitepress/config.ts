@@ -1,43 +1,21 @@
 import { defineConfig } from "vitepress";
+import sidebar from "./sidebar";
 
 export default defineConfig({
   // ...
-  title: "cz-ui",
+  title: "cz-blog",
   description: "Vite & Vue powered static site generator.",
   lastUpdated: true,
+  markdown: {
+    lineNumbers: true,
+  },
   themeConfig: {
     nav: [
-      { text: "指南", link: "/guide/" },
-      { text: "组件", link: "/component/" },
+      { text: "前端", link: "/web/" },
+      { text: "服务端", link: "/server/" },
     ],
-    socialLinks: [
-      { icon: "github", link: "https://github.com/vuejs/vitepress" },
-    ],
-    sidebar: {
-      "/guide/": [
-        {
-          text: "指南",
-          items: [
-            { text: "Index", link: "/guide/" },
-            { text: "One", link: "/guide/rule" },
-          ],
-        },
-      ],
-
-      "/component/": [
-        {
-          text: "组件",
-          items: [
-            { text: "Index", link: "/component/" },
-            { text: "Three", link: "/component/btn" },
-          ],
-        },
-      ],
-    },
-    editLink: {
-      pattern: 'https://github.com/vuejs/vitepress/edit/main/docs/:path',
-      text: 'Edit this page on GitHub'
-    },
+    socialLinks: [{ icon: "github", link: "https://github.com/cz6c" }],
+    sidebar,
     docFooter: {
       prev: "上一页",
       next: "下一页",
