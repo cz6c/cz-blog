@@ -6,7 +6,7 @@ hero:
   text: 随便写点啥。
   tagline: 前端(Vue)/后端(node) ...
   image:
-    src: ../../assets/svg/home.svg
+    src: /svg/home.svg
     alt: Cobweb Docs Vitepress
   actions:
     - theme: brand
