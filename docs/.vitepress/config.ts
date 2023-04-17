@@ -13,6 +13,7 @@ export default defineConfig({
     nav: [
       { text: "前端", link: "/web/" },
       { text: "服务端", link: "/server/" },
+      { text: "插件/库", link: "/plugin/" },
     ],
     socialLinks: [{ icon: "github", link: "https://github.com/cz6c" }],
     sidebar,

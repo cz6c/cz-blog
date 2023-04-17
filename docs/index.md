@@ -2,11 +2,11 @@
 layout: home
 
 hero:
-  name: cz code blog
-  text: 杂鱼一枚，随便写点啥。
-  tagline: 前端(Vue)/后端(node) 😂...
+  name: czcode blog
+  text: 随便写点啥。
+  tagline: 前端(Vue)/后端(node) ...
   image:
-    src: ././images/logo.png
+    src: ../../assets/svg/home.svg
     alt: Cobweb Docs Vitepress
   actions:
     - theme: brand
@@ -16,22 +16,19 @@ hero:
 features:
   - icon: ⚡️
     title: 前端
-    details: JavaScript, TypeScript, Vue, Vite, Node.Js
-  - icon: 🖖
-    title: 后端
-    details: Python3, PHP, SprinBoot, mysql, seqServer
-  - icon: 🛠️
-    title: 组件
-    details: vue-cobweb, vue-cobweb-app
+    details: JS, TS, Css, Vue, WebPack, Vite, 前端工程化 
+  - icon: 📦
+    title: 服务端
+    details: Node.js, Koa 2, Express, Mysql, Sequelize, Nginx
+  # - icon: 🛠️
+  #   title: 组件
+  #   details: vue-cobweb, vue-cobweb-app
   - icon: 🔧
     title: 工具
     details: project-general-tools
   - icon: 🧱
     title: 技术
     details: 从0-1搭建vue项目, 使用vitepress搭建博客
-  - icon: 📦
-    title: 大杂烩
-    details: git, hexo
 ---
 
 <style>

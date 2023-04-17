@@ -1,5 +1,8 @@
 # 面经
 
+目录
+[[toc]]
+
 ## CSS
 
 ### 盒模型的理解
@@ -46,12 +49,12 @@
 - 子元素有宽高
 
   ```css
-  父元素 {
+  .father {
     position: relative;
   }
 
   // 第一种
-  子元素 {
+  .childer {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -62,7 +65,7 @@
   }
 
   // 第二种
-  子元素 {
+  .childer {
     position: absolute;
     top: 0;
     left: 0;
@@ -78,10 +81,10 @@
 
   ```css
   // 第一种
-  父元素 {
+  .father {
       position：relative
   }
-  子元素 {
+  .childer {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -89,7 +92,7 @@
   }
 
   //第二种
-  父元素 {
+  .father {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -105,9 +108,31 @@
 3. 最常用的是 `transfrom`属性的各个 css 变换函数 来实现元素的旋转`rotate`，缩放`scale`，倾斜`skew`或平移`translate`、以及透明度 `opacity`
 4. 最后在需要动画的元素样式中 使用 `animation-name` 指定动画名字 `animation-timing-fuction` 设置动画的运动曲线 `animation-duration` 设置动画周期 `animation-delay` 设置动画延时 `animation-iteration-count` 设置动画的执行次数
 
+```css
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translate3d(-80px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+}
+.fade-in-left {
+  animation-name: fadeInLeft; //动画名
+  animation-duration: 1s; //动画周期
+  animation-delay: 0.6s; //动画延时
+  animation-fill-mode: forwards;
+  animation-timing-function: linear; //动画曲线 匀速
+  animation-iteration-count: infinite; //动画次数 无限循环
+  opacity: 0;
+}
+```
+
 - web 动画 requestAnimationFrame
 
-```
+```js
 const test = document.querySelector<HTMLDivElement>("#test")!;
 
 let i = 0;
@@ -214,21 +239,21 @@ sass/less 常用功能：样式嵌套，css 变量，循环语句，条件语句
 
 - Set 对象是值的集合。Set 对象中的值只能出现一次；它在 Set 对象的集合中是独一无二的。
 
-      - new Set()
-      - Set.prototype.add():如果Set对象中没有相同值的元素，则将新元素插入到Set对象中。
-      - Set.prototype.has():返回一个布尔值，断言Set对象中是否存在具有给定值的元素。
-      - Set.prototype.values()或者.keys():返回一个新的迭代器对象，其中包含Set对象中所有的值，并以插入Set对象的顺序排列。
-      - Set.prototype.entries():返回一个新的迭代器对象，元素以[key, value]形式返回，键与值相同，并以插入Set对象的顺序排列。
+  - new Set()
+  - Set.prototype.add():如果 Set 对象中没有相同值的元素，则将新元素插入到 Set 对象中。
+  - Set.prototype.has():返回一个布尔值，断言 Set 对象中是否存在具有给定值的元素。
+  - Set.prototype.values()或者.keys():返回一个新的迭代器对象，其中包含 Set 对象中所有的值，并以插入 Set 对象的顺序排列。
+  - Set.prototype.entries():返回一个新的迭代器对象，元素以[key, value]形式返回，键与值相同，并以插入 Set 对象的顺序排列。
 
 - Map 对象是键值对的集合。Map 对象中的一个键只能出现一次；它在 Map 对象的集合中是独一无二的。
 
-      - new Map()
-      - Map.prototype.get():返回与指定的键 key 关联的值，若不存在关联的值，则返回 undefined。
-      - Map.prototype.has():返回一个布尔值，用来表明Map对象中是否存在与指定的键 key 关联的值。
-      - Map.prototype.set():在Map对象中设置与指定的键 key 关联的值。
-      - Map.prototype.keys():返回一个新的迭代对象，其中包含Map对象中所有的键，并以插入Map对象的顺序排列。
-      - Map.prototype.values():返回一个新的迭代对象，其中包含Map对象中所有的值，并以插入Map对象的顺序排列。
-      - Map.prototype.entries():返回一个新的迭代对象，其为包含Map对象中所有键值对[key, value]，并以插入Map对象的顺序排列。
+  - new Map()
+  - Map.prototype.get():返回与指定的键 key 关联的值，若不存在关联的值，则返回 undefined。
+  - Map.prototype.has():返回一个布尔值，用来表明 Map 对象中是否存在与指定的键 key 关联的值。
+  - Map.prototype.set():在 Map 对象中设置与指定的键 key 关联的值。
+  - Map.prototype.keys():返回一个新的迭代对象，其中包含 Map 对象中所有的键，并以插入 Map 对象的顺序排列。
+  - Map.prototype.values():返回一个新的迭代对象，其中包含 Map 对象中所有的值，并以插入 Map 对象的顺序排列。
+  - Map.prototype.entries():返回一个新的迭代对象，其为包含 Map 对象中所有键值对[key, value]，并以插入 Map 对象的顺序排列。
 
 ### 深拷贝和浅拷贝
 
@@ -316,49 +341,49 @@ sass/less 常用功能：样式嵌套，css 变量，循环语句，条件语句
 
     应用场景：防抖、节流
 
-        // 实现防抖：你尽管触发事件，但是我一定在事件触发 n 秒后才执行，
-        // 如果你在一个事件触发的 n 秒内又触发了这个事件，那我就以新的事件的时间为准，n 秒后才执行，
-        // 总之，就是要等你触发完事件 n 秒内不再触发事件，我才执行!
-        function debounce(fn, wait, immediate) {
-            let timer = null
+```js
+// 实现防抖：你尽管触发事件，但是我一定在事件触发 n 秒后才执行，
+// 如果你在一个事件触发的 n 秒内又触发了这个事件，那我就以新的事件的时间为准，n 秒后才执行，
+// 总之，就是要等你触发完事件 n 秒内不再触发事件，我才执行!
+function debounce(fn, wait, immediate) {
+  let timer = n;
+  return function () {
+    let args = arguments;
+    let context = t;
+    if (immediate && !timer) {
+      fn.apply(context, args);
 
-            return function() {
-                let args = arguments
-                let context = this
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        fn.apply(context, args);
+      }, wait);
+    }
+  };
+}
+```
 
-                if (immediate && !timer) {
-                    fn.apply(context, args)
-                }
+```js
+//实现节流：如果你持续触发事件，每隔一段时间，只执行一次
+function throttle(fn, wait, immediate) {
+  let timer = null;
+  let callNow = immedi;
+  return function () {
+    let context = this,
+      args = argume;
+    if (callNow) {
+      fn.apply(context, args);
+      callNow = false;
 
-                if (timer) clearTimeout(timer)
-                timer = setTimeout(() => {
-                    fn.apply(context, args)
-                }, wait)
-            }
-        }
-
-        //实现节流：如果你持续触发事件，每隔一段时间，只执行一次事件。
-        function throttle(fn, wait, immediate) {
-            let timer = null
-            let callNow = immediate
-
-            return function() {
-                let context = this,
-                args = arguments
-
-                if (callNow) {
-                    fn.apply(context, args)
-                    callNow = false
-                }
-
-                if (!timer) {
-                    timer = setTimeout(() => {
-                        fn.apply(context, args)
-                        timer = null
-                    }, wait)
-                }
-            }
-        }
+      if (!timer) {
+        timer = setTimeout(() => {
+          fn.apply(context, args);
+          timer = null;
+        }, wait);
+      }
+    }
+  };
+}
+```
 
 ### call、apply、bind
 
@@ -675,14 +700,14 @@ js 是一门单线程语言，任务分为同步任务和异步任务，然后�
 > unbind - 一旦指令被移除，就会调用这个钩子。也只调用一次。
 
 ```js
-html
-<p v-highlight="'yellow'">以亮黄色高亮显示此文本</p>
-js
-Vue.directive('highlight', {
+//html
+<p v-highlight="'yellow'">以亮黄色高亮显示此文本</p>;
+//js
+Vue.directive("highlight", {
   bind(el, binding, vnode) {
-    el.style.background = binding.value
-  }
-})
+    el.style.background = binding.value;
+  },
+});
 ```
 
 此处，在这个元素的初始设置中，通过给指令传递一个值来绑定样式，该值可以在应用中任意更改。
@@ -712,8 +737,8 @@ app.directive("highlight", {
 
 在 Vue 2 中，必须通过 vnode 参数访问组件实例：
 
-```
-js
+```js
+//js
 bind(el, binding, vnode) {
   const vm = vnode.context
 }
@@ -721,8 +746,8 @@ bind(el, binding, vnode) {
 
 在 Vue 3 中，实例现在是 binding 参数的一部分：
 
-```
-js
+```js
+//js
 mounted(el, binding, vnode) {
   const vm = binding.instance
 }
@@ -747,27 +772,27 @@ mounted(el, binding, vnode) {
 
 - 打包流程
 
-      1. 读取webpack配置参数
-      2. 创建 compiler 对象，挂载所有配置的 Plugin ，执行对象的 run 方法 开始编译
-      3. 根据配置中的设置 entry 找到所有入口，从入口文件开始编译，调用配置中所有的 Loader 对模块进行转换，并找到其导入的依赖模块，递归遍历解析，形成依赖关系树
-      4. 将编译后的模块 组合成代码块 chunk，再将 chunk 转换为文件，输出到指定的文件中
+  1. 读取 webpack 配置参数
+  2. 创建 compiler 对象，挂载所有配置的 Plugin ，执行对象的 run 方法 开始编译
+  3. 根据配置中的设置 entry 找到所有入口，从入口文件开始编译，调用配置中所有的 Loader 对模块进行转换，并找到其导入的依赖模块，递归遍历解析，形成依赖关系树
+  4. 将编译后的模块 组合成代码块 chunk，再将 chunk 转换为文件，输出到指定的文件中
 
 - `Loader`: 负责文件转换，本质就是一个函数，以转换后的内容为入参在函数中进行进一步处理，返回转换后的结果
 
-      * babel-loader：把es6转es5
-      * ts-loader：把ts转js
-      * sass-loader：把scss代码转为css代码
-      * css-loader：加载css
-      * style-loader：把css代码注入到js中，通过dom操作去加载css
-      * vue-loader：加载.vue组件
+  - babel-loader：把 es6 转 es5
+  - ts-loader：把 ts 转 js
+  - sass-loader：把 scss 代码转为 css 代码
+  - css-loader：加载 css
+  - style-loader：把 css 代码注入到 js 中，通过 dom 操作去加载 css
+  - vue-loader：加载.vue 组件
 
 - `Plugin`: 负责功能扩展，本质就是类，在类中有一个 apply 方法，进行插件挂载时，就会执行这个方法，在这个方法中监听 webpack 运行生命周期提供的钩子，并在合适的时机通过它提供的 api 改变输出的结果
 
-      * ignore-plugin：忽略部分文件
-      * html-webpack-plugin：压缩html文件
-      * terser-webpack-plugin：压缩js代码
-      * clean-webpack-plugin：每次打包前清空输出文件夹
-      * webpack-bundle-analyzer：可视化 webpack 输出文件的体积
+  - ignore-plugin：忽略部分文件
+  - html-webpack-plugin：压缩 html 文件
+  - terser-webpack-plugin：压缩 js 代码
+  - clean-webpack-plugin：每次打包前清空输出文件夹
+  - webpack-bundle-analyzer：可视化 webpack 输出文件的体积
 
 - webpack 热更新原理
 
@@ -808,9 +833,9 @@ mounted(el, binding, vnode) {
 
 - 构建方面：
 
-      * 压缩代码文件，在 webpack 中使用 terser-webpack-plugin 压缩 Javascript 代码；使用 css-minimizer-webpack-plugin 压缩 CSS 代码；使用 html-webpack-plugin 压缩 html 代码。
-      * 开启 gzip 压缩，webpack 中使用 compression-webpack-plugin ，node 作为服务器也要开启，使用 compression。
-      * 常用的第三方库使用 CDN 服务，在 webpack 中我们要配置 externals，将比如 React， Vue 这种包不打倒最终生成的文件中。而是采用 CDN 服务。
+  - 压缩代码文件，在 webpack 中使用 terser-webpack-plugin 压缩 Javascript 代码；使用 css-minimizer-webpack-plugin 压缩 CSS 代码；使用 html-webpack-plugin 压缩 html 代码。
+  - 开启 gzip 压缩，webpack 中使用 compression-webpack-plugin ，node 作为服务器也要开启，使用 compression。
+  - 常用的第三方库使用 CDN 服务，在 webpack 中我们要配置 externals，将比如 React， Vue 这种包不打倒最终生成的文件中。而是采用 CDN 服务。
 
 ## 常见手写和算法
 
