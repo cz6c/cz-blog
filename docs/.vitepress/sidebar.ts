@@ -14,10 +14,8 @@ export default {
       text: "vue",
       collapsed: true,
       items: [
-        { text: "vue", link: "/web/vue/" },
-        { text: "routes", link: "/web/vue/routes" },
-        { text: "bind_style", link: "/web/vue/bind_style" },
-        { text: "sync", link: "/web/vue/sync" },
+        { text: "vue2项目实践积累", link: "/web/vue/" },
+        { text: "Router", link: "/web/vue/router" },
       ],
     },
   ],
