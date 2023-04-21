@@ -18,6 +18,14 @@ export default {
         { text: "Router", link: "/web/vue/router" },
       ],
     },
+    {
+      text: "apicloud",
+      collapsed: true,
+      items: [
+        { text: "apicloud创建应用", link: "/web/apicloud/" },
+        { text: "apicloud开发实践案例", link: "/web/apicloud/case" },
+      ],
+    },
   ],
   "/server/": [
     {
