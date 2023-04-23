@@ -14,7 +14,7 @@ export default {
       text: "vue",
       collapsed: true,
       items: [
-        { text: "vue2项目实践积累", link: "/web/vue/" },
+        { text: "vue2开发实践案例", link: "/web/vue/" },
         { text: "Router", link: "/web/vue/router" },
       ],
     },
@@ -32,24 +32,42 @@ export default {
       text: "aws服务器搭建",
       collapsed: false,
       items: [
-        { text: "获取服务器", link: "/server/" },
-        { text: "安装宝塔", link: "/server/bt" },
-        { text: "安装nginx", link: "/server/nginx" },
-        { text: "安装node", link: "/server/node" },
-        { text: "安装pm2", link: "/server/pm2" },
+        { text: "获取服务器", link: "/server/aws/" },
+        { text: "安装宝塔", link: "/server/aws/bt" },
+        { text: "安装nginx", link: "/server/aws/nginx" },
+        { text: "安装node", link: "/server/aws/node" },
+        { text: "安装pm2", link: "/server/aws/pm2" },
+      ],
+    },
+    {
+      text: "express",
+      collapsed: false,
+      items: [
+        {
+          text: "基于 Node.js、Express 和 TypeScript 搭建项目",
+          link: "/server/express/",
+        },
+        {
+          text: "基于mvc模型，进行模块化接口开发",
+          link: "/server/express/mvc",
+        },
+        {
+          text: "基于jwt，实现token登录鉴权",
+          link: "/server/express/jwt",
+        },
       ],
     },
   ],
   "/plugin/": [
     {
-      text: "aws服务器搭建",
+      text: "插件/库",
       collapsed: false,
       items: [
-        { text: "获取服务器", link: "/server/" },
-        { text: "安装宝塔", link: "/server/bt" },
-        { text: "安装nginx", link: "/server/nginx" },
-        { text: "安装node", link: "/server/node" },
-        { text: "安装pm2", link: "/server/pm2" },
+        { text: "获取服务器", link: "/plugin/" },
+        { text: "安装宝塔", link: "/plugin/bt" },
+        { text: "安装nginx", link: "/plugin/nginx" },
+        { text: "安装node", link: "/plugin/node" },
+        { text: "安装pm2", link: "/plugin/pm2" },
       ],
     },
   ],
