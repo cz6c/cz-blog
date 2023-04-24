@@ -965,6 +965,235 @@ console.log(fn instanceof Function); //true
 console.log(null instanceof Object); //false
 ```
 
+## 微信小程序
+
+### 简单描述下微信小程序的相关文件类型?
+
+微信小程序项目结构主要有四个文件类型
+
+- WXML（WeiXin Markup Language）是框架设计的一套标签语言，结合基础组件、事件系统，可以构建出页面的结构。内部主要是微信自己定义的一套组件
+- WXSS (WeiXin Style Sheets)是一套样式语言，用于描述 WXML 的组件样式
+- js 逻辑处理，网络请求
+- json 小程序设置，如页面注册，页面标题及tabBar
+
+主要文件
+
+- app.json 必须要有这个文件，如果没有这个文件，项目无法运行，因为微信框架把这个作为配置文件入口，整个小程序的全局配置。包括页面注册，网络设置，以及小程序的 window 背景色，配置导航条样式，配置默认标题
+- app.js 必须要有这个文件，没有也是会报错！但是这个文件创建一下就行 什么都不需要写以后我们可以在这个文件中监听并处理小程序的生命周期函数、声明全局变量
+app.wxss 可选
+
+### 小程序的双向绑定和vue哪里不一样?
+
+小程序直接 this.data 的属性是不可以同步到视图的，必须调用：
+
+```js
+this.setData({
+    // 这里设置
+})
+```
+
+### 小程序页面间有哪些传递数据的方法?
+
+- 使用全局变量实现数据传递
+在 app.js 文件中定义全局变量 globalData， 将需要存储的信息存放在里面
+使用的时候，直接使用 getApp() 拿到存储的信息
+
+```js
+// app.js
+App({
+     // 全局变量
+  globalData: {
+    userInfo: null
+  }
+})
+```
+
+- 使用 wx.navigateTo 与 wx.redirectTo 的时候，可以将部分数据放在 url 里面，并在新页面 onLoad 的时候初始化，
+需要注意的问题：wx.navigateTo 和 wx.redirectTo 不允许跳转到 tab 所包含的页面
+onLoad 只执行一次
+
+```js
+// Navigate
+wx.navigateTo({
+  url: '../pageD/pageD?name=raymond&gender=male',
+})
+
+// Redirect
+wx.redirectTo({
+  url: '../pageD/pageD?name=raymond&gender=male',
+})
+
+// pageB.js
+Page({
+  onLoad: function(option){
+    console.log(option.name + 'is' + option.gender)
+    this.setData({
+      option: option
+    })
+  }
+})
+```
+
+- 使用本地缓存 Storage 相关
+
+### 小程序的生命周期函数
+
+- onLoad 页面加载时触发。一个页面只会调用一次，可以在 onLoad 的参数中获取打开当前页面路径中的参数
+- onShow() 页面显示/切入前台时触发
+- onReady() 页面初次渲染完成时触发。一个页面只会调用一次，代表页面已经准备妥当，可以和视图层进行交互
+- onHide() 页面隐藏/切入后台时触发。 如 navigateTo 或底部 tab 切换到其他页面，小程序切入后台等
+- onUnload() 页面卸载时触发。如 redirectTo 或 navigateBack 到其他页面时
+
+### 微信小程序的优劣势
+
+- 优势
+即用即走，不用安装，省流量，省安装时间，不占用桌面
+依托微信流量，天生推广传播优势
+开发成本比 App 低
+
+- 缺点
+用户留存，即用即走是优势，也存在一些问题
+入口相对传统 App 要深很多
+限制较多,页面大小不能超过2M。不能打开超过10个层级的页面
+
+### 如何实现下拉刷新
+
+首先在全局 config 中的 window 配置 enablePullDownRefresh
+在 Page 中定义 onPullDownRefresh 钩子函数,到达下拉刷新条件后，该钩子函数执行，发起请求方法
+请求返回后，调用 wx.stopPullDownRefresh 停止下拉刷新
+
+### bindtap和catchtap的区别是什么?
+
+- 相同点：首先他们都是作为点击事件函数，就是点击时触发。在这个作用上他们是一样的，可以不做区分
+- 不同点：他们的不同点主要是bindtap是不会阻止冒泡事件的，catchtap是阻值冒泡的
+
+### 简述下 wx.navigateTo(), wx.redirectTo(), wx.switchTab(), wx.navigateBack(), wx.reLaunch()的区别?
+
+- wx.navigateTo()：保留当前页面，跳转到应用内的某个页面。但是不能跳到 tabbar 页面
+- wx.redirectTo()：关闭当前页面，跳转到新的页面（类似重定向）。但是不允许跳转到 tabbar 页面
+- wx.switchTab()：跳转到 tabBar 页面，并关闭其他所有非 tabBar 页面
+- wx.navigateBack():关闭当前页面，返回上一页面或多级页面。可通过 getCurrentPages() 获取当前的页面栈，决定需要返回几层
+- wx.reLaunch()：关闭所有页面，打开到应用内的某个页面
+
+### 登录流程
+
+登录流程是调wx.login获取code传给后台服务器获取微信用户唯一标识openid及本次登录的会话密钥（session_key）等）。
+
+拿到开发者服务器传回来的会话密钥（session_key）之后，前端要保存wx.setStorageSync('sessionKey', 'value')
+
+持久登录状态：session信息存放在cookie中以请求头的方式带回给服务端，放到request.js里的wx.request的header里
+
+### 常用指令
+wx:for、 wx:if
+
+### 小程序分包
+
+- 使用分包：通过在 app.json subpackages 字段声明项目分包结构：
+
+```json
+{
+  "pages":[
+    "pages/index",
+    "pages/logs"
+  ],
+  "subpackages": [
+    {
+      "root": "packageA",
+      "pages": [
+        "pages/cat",
+        "pages/dog"
+      ]
+    }, {
+      "root": "packageB",
+      "name": "pack2",//分包别名，分包预下载时可以使用
+      // 分包页面路径，相对于分包根目录
+      "pages": [
+        "pages/apple",
+        "pages/banana"
+      ]
+    }
+  ]
+}
+```
+independent	Boolean	分包是否是独立分包
+
+打包原则
+声明 subpackages 后，将按 subpackages 配置路径进行打包，subpackages 配置路径外的目录将被打包到主包中
+主包也可以有自己的 pages，即最外层的 pages 字段。subpackage 的根目录不能是另外一个 subpackage 内的子目录
+tabBar 页面必须在主包内
+
+引用原则
+packageA 无法 require packageB JS 文件，但可以 require 主包、packageA 内的 JS 文件；使用 分包异步化 时不受此条限制
+packageA 无法 import packageB 的 template，但可以 require 主包、packageA 内的 template
+packageA 无法使用 packageB 的资源，但可以使用主包、packageA 内的资源
+
+- 分包预下载：预下载分包行为在进入某个页面时触发，通过在 app.json 增加 preloadRule 配置来控制。
+
+开发者可以通过配置，在进入小程序某个页面时，由框架自动预下载可能需要的分包，提升进入后续分包页面时的启动速度。对于独立分包，也可以预下载主包。
+
+vConsole 里有preloadSubpackages开头的日志信息，可以用来验证预下载的情况。
+
+```json
+{
+  "pages": ["pages/index"],
+  "subpackages": [
+    {
+      "root": "important",
+      "pages": ["index"],
+    },
+    {
+      "root": "sub1",
+      "pages": ["index"],
+    },
+    {
+      "name": "hello",
+      "root": "path/to",
+      "pages": ["index"]
+    },
+    {
+      "root": "sub3",
+      "pages": ["index"]
+    },
+    {
+      "root": "indep",
+      "pages": ["index"],
+      "independent": true
+    }
+  ],
+  "preloadRule": {
+    "pages/index": {
+      "network": "all", //在指定网络下预下载，可选值为：all: 不限网络wifi: 仅wifi下预下载
+      "packages": ["important"]
+    },
+    "sub1/index": {
+      "packages": ["hello", "sub3"]
+    },
+    "sub3/index": {
+      "packages": ["path/to"]
+    },
+    "indep/index": {
+      "packages": ["__APP__"] // 进入页面后预下载分包的 root 或 name，__APP__ 代表主包
+    }
+  }
+}
+```
+
+preloadRule 中，key 是页面路径，value 是进入此页面的预下载配置
+
+限制
+同一个分包中的页面享有共同的预下载大小限额 2M，限额会在工具中打包时校验。
+如，页面 A 和 B 都在同一个分包中，A 中预下载总大小 0.5M 的分包，B中最多只能预下载总大小 1.5M 的分包。
+
+- 独立分包 independent字段声明，独立分包中不能依赖主包和其他分包中的内容
+
+独立分包是小程序中一种特殊类型的分包，可以独立于主包和其他分包运行。从独立分包中页面进入小程序时，不需要下载主包。当用户进入普通分包或主包内页面时，主包才会被下载。
+
+开发者可以按需将某些具有一定功能独立性的页面配置到独立分包中。当小程序从普通的分包页面启动时，需要首先下载主包；而独立分包不依赖主包即可运行，可以很大程度上提升分包页面的启动速度。
+
+- 分包异步化
+
+在小程序中，不同的分包对应不同的下载单元；因此，除了非独立分包可以依赖主包外，分包之间不能互相使用自定义组件或进行 require。「分包异步化」特性将允许通过一些配置和新的接口，使部分跨分包的内容可以等待下载后异步使用，从而一定程度上解决这个限制。
+
 ## 其他
 
 ### 你还有什么想要问我的么

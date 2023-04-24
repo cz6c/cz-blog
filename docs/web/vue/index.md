@@ -67,3 +67,11 @@ setBg() {
     return { backgroundImage: "url(" + this.homeBg + ")" };
 }
 ```
+
+### 主题色
+
+[![p9mLIzT.png](https://s1.ax1x.com/2023/04/24/p9mLIzT.png)](https://imgse.com/i/p9mLIzT)
+
+[![p9mL7yF.png](https://s1.ax1x.com/2023/04/24/p9mL7yF.png)](https://imgse.com/i/p9mL7yF)
+
+[![p9mLTQU.png](https://s1.ax1x.com/2023/04/24/p9mLTQU.png)](https://imgse.com/i/p9mLTQU)

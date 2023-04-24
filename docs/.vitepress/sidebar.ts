@@ -16,6 +16,8 @@ export default {
       items: [
         { text: "vue2开发实践案例", link: "/web/vue/" },
         { text: "Router", link: "/web/vue/router" },
+        { text: "版本控制", link: "/web/vue/env" },
+        { text: "微信登录", link: "/web/vue/wx" },
       ],
     },
     {
@@ -60,13 +62,7 @@ export default {
     {
       text: "插件/库",
       collapsed: false,
-      items: [
-        { text: "获取服务器", link: "/plugin/" },
-        { text: "安装宝塔", link: "/plugin/bt" },
-        { text: "安装nginx", link: "/plugin/nginx" },
-        { text: "安装node", link: "/plugin/node" },
-        { text: "安装pm2", link: "/plugin/pm2" },
-      ],
+      items: [{ text: "插件/库", link: "/plugin/" }],
     },
   ],
 };

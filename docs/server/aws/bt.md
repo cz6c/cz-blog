@@ -86,7 +86,7 @@ wget -O install.sh https://download.bt.cn/install/install-ubuntu_6.0.sh && sudo 
 ```
 
 
-## pm2 部署后端项目 experss
+## pm2 部署 experss
 
 ### 上传项目代码
 
