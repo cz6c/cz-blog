@@ -136,7 +136,7 @@ app.listen(port, () => {
 });
 ```
 
-启动服务，我们就可以通过 http://localhost:3000/xxxxx  的形式访问到 public 目录下的xxxxx文件了。
+启动服务，我们就可以通过 `http://localhost:3000/xxxxx`  的形式访问到 public 目录下的xxxxx文件了。
 
 ### 配置跨域
 

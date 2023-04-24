@@ -9,6 +9,7 @@ export default defineConfig({
   markdown: {
     lineNumbers: true,
   },
+  ignoreDeadLinks: true, //解决 VitePress 在构建时不会因为死链接而导致构建失败。
   themeConfig: {
     nav: [
       { text: "前端", link: "/web/" },
