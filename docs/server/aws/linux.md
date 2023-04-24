@@ -1,50 +1,116 @@
-## 指令安装 Nginx
+# Linux 安装插件/应用
+
+目录
+[[toc]]
+
+## 安装 node、PM2
+
+### 安装 node
+
+```shell
+wget https://nodejs.org/dist/v14.16.0/node-v14.16.0-linux-x64.tar.xz
+```
+
+解压到 uer/ 目录
+
+```shell
+tar xvf node-v14.16.0-linux-x64.tar.xz -C /usr
+```
+
+修改解压文件名字为 node
+
+解压文件的 bin 目录底下包含了 node、npm 等命令，我们可以使用 ln 命令来设置软连接：
+
+```shell
+ln -s /usr/node/bin/node /usr/local/bin/
+ln -s /usr/node/bin/npm /usr/local/bin/
+```
+
+此时就可以使用 node npm 命令了
+
+### 安装 PM2
+
+```shell
+npm install pm2 -g
+```
+
+安装好后在 node/bin 目录下会出现一个 pm2 文件，同样设置软连接
+
+```shell
+ln -sf /usr/node/bin/pm2 /usr/local/bin/
+```
+
+查看进程
+
+```shell
+pm2 ls
+```
+
+## Nginx 安装与配置
 
 ### 安装 Nginx
 
-1. 安装编译工具及库文件
+安装编译工具及库文件
 
-> yum -y install make zlib zlib-devel gcc-c++ libtool openssl openssl-devel
-> yum install -y pcre pcre-devel
+```shell
+yum -y install make zlib zlib-devel gcc-c++ libtool openssl openssl-devel
+yum install -y pcre pcre-devel
+```
 
-2. 创建 nginx 文件夹并进入 nginx 文件夹
+创建 nginx 文件夹并进入 nginx 文件夹
 
-> mkdir /usr/local/nginx
-> cd /usr/local/nginx
+```shell
+mkdir /usr/local/nginx
+cd /usr/local/nginx
+```
 
-3. 下载
+下载
 
-> wget https://nginx.org/download/nginx-1.22.0.tar.gz
+```shell
+wget https://nginx.org/download/nginx-1.22.0.tar.gz
+```
 
-4. 解压并进入 nginx 目录
+解压并进入 nginx 目录
 
-> tar -zxvf nginx-1.22.0.tar.gz
-> cd nginx-1.22.0
+```shell
+tar -zxvf nginx-1.22.0.tar.gz
+cd nginx-1.22.0
+```
 
-5. 使用 nginx 默认配
+使用 nginx 默认配
 
-> ./configure --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module --with-pcre=/usr/local/pcre-8.45
+```shell
+./configure --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module --with-pcre=/usr/local/pcre-8.45
+```
 
-6. 编译安装
+编译安装
 
-> make && make install
+```shell
+make && make install
+```
 
-7. 创建软连接
+创建软连接
 
-> ln -sf /usr/local/nginx/sbin/nginx /usr/local/bin/
+```shell
+ln -sf /usr/local/nginx/sbin/nginx /usr/local/bin/
+```
 
-8. 查看 nginx 版本
+查看 nginx 版本
 
-> nginx -v
+```shell
+nginx -v
+```
 
 ### Nginx 配置
 
-1. 创建 Nginx 运行使用的用户 www：
+创建 Nginx 运行使用的用户 www：
 
+```shell
 > /usr/sbin/groupadd www
 > /usr/sbin/useradd -g www www
+```
 
-2. 配置 nginx.conf ，将/usr/local/webserver/nginx/conf/nginx.conf 替换为以下内容
+配置 nginx.conf ，将/usr/local/webserver/nginx/conf/nginx.conf 替换为以下内容
 
 ```
 user  www www;
@@ -257,97 +323,28 @@ include /www/server/panel/vhost/nginx/*.conf;
 }
 ```
 
-3. 检查配置文件的正确性，并重载配置文件
+检查配置文件的正确性，并重载配置文件
 
-> nginx -t
-> nginx -s reload # 重新载入配置文件
-
-4. 启动 nginx
-
-> nginx
-
-5. 查看进程
-
-> ps -ef
-
-### 其他命令
-
-> nginx -s reopen # 重启 Nginx
-> nginx -s stop # 停止 Nginx
-
-## 宝塔安装
-
-### 软件商店安装
-
-### 配置 nginx
-
-基本上宝塔安装`nginx`的时候配置的差不多，
-需要注意部署前端项目时，要先在宝塔网站上添加一个站点，并把站点的域名配置好，添加成功后会在 wwwroot 下创建一个项目文件，
-修改`nginx`配置文件做反向代理，修改项目文件路径和域名，如下所示
-
+```shell
+nginx -t
+nginx -s reload # 重新载入配置文件
 ```
-  server
-    {
-        listen       80;
-        server_name  www.cz6hy9.top; #重点1,修改为主机名或域名
-        rewrite ^(.*)$ https://$host$1 permanent; #将所有HTTP请求通过rewrite指令重定向到 HTTPS
 
-        #charset koi8-r;
-        #access_log  logs/host.access.log  main;
+启动 nginx
 
-        location / {
-            #重点2,如要自定义路径请修改，默认是nginx/html/
-            root /www/wwwroot/www.cz6hy9.top;
-            #根索引文件，也就是输入ip或域名后在浏览器访问的第一页面
-            index index.php index.html index.htm default.php default.htm default.html;
-            #root   html;
-            #index  index.html index.htm;
-            #try_files $uri $uri.html $uri/ /index.html;#这里是多页面访问配置，解决404错误
-        }
+```shell
+nginx
+```
 
-        error_page  404 /404.html;
+1. 查看进程
 
-        # redirect server error pages to the static page /50x.html
-        error_page   500 502 503 504  /50x.html;
-        location = /50x.html {
-            root   html;
-        }
+```shell
+ps -ef
+```
 
-    }
+其他命令
 
-    # HTTPS 服务
-    server
-    {
-       listen       443 ssl;
-       server_name  www.cz6hy9.top; #重点1,修改为主机名或域名
-
-       # 然后上传到 nginx.conf 同一目录下
-       ssl_certificate      9534144_www.cz6hy9.top/rect.pem; #重点2,ssl证书
-       ssl_certificate_key  9534144_www.cz6hy9.top/rect.key; #重点3,ssl证书key
-
-       ssl_session_cache    shared:SSL:1m;
-       ssl_session_timeout  10m; #超时
-
-       # 加密协议等等
-       ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-       # ssl_ciphers PROFILE=SYSTEM;
-       ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
-       ssl_prefer_server_ciphers on;
-
-       location / {
-            #重点2,如要自定义路径请修改，默认是nginx/html/
-            root /www/wwwroot/www.cz6hy9.top;
-            #根索引文件，也就是输入ip或域名后在浏览器访问的第一页面
-            index index.php index.html index.htm default.php default.htm default.html;
-            #try_files $uri $uri.html $uri/ /index.html;#这里是多页面访问配置，解决404错误
-       }
-
-        error_page 404 /404.html;
-        location = /40x.html {
-        }
-
-        error_page 500 502 503 504 /50x.html;
-        location = /50x.html {
-        }
-    }
+```shell
+nginx -s reopen # 重启 Nginx
+nginx -s stop # 停止 Nginx
 ```

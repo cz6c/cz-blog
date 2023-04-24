@@ -32,11 +32,9 @@ export default {
       text: "aws服务器搭建",
       collapsed: false,
       items: [
-        { text: "获取服务器", link: "/server/aws/" },
-        { text: "安装宝塔", link: "/server/aws/bt" },
-        { text: "安装nginx", link: "/server/aws/nginx" },
-        { text: "安装node", link: "/server/aws/node" },
-        { text: "安装pm2", link: "/server/aws/pm2" },
+        { text: "注册aws", link: "/server/aws/" },
+        { text: "宝塔使用", link: "/server/aws/bt" },
+        { text: "linux安装插件/应用", link: "/server/aws/linux" },
       ],
     },
     {

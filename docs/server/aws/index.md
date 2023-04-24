@@ -44,7 +44,9 @@
 
 cd 到私钥目录
 
-> ssh -i "awskey20230325.pem" ec2-user@ec2-18-163-105-12.ap-east-1.compute.amazonaws.com
+```shell
+ssh -i "awskey20230325.pem" ec2-user@ec2-18-163-105-12.ap-east-1.compute.amazonaws.com
+```
 
 ### electerm pem 密钥连接（推荐使用）
 
@@ -52,26 +54,33 @@ cd 到私钥目录
 
 ### 创建 root 密码
 
-> soudo passwd root
+```shell
+soudo passwd root
+```
 
 ### 切换 root 用户
 
-> su root
+```shell
+su root
+```
 
 ### 修改 sshd_config 文件
 
-> vim /etc/ssh/sshd_config
+```shell
+vim /etc/ssh/sshd_config
+```
 
 修改
 
-> PasswordAuthentication yes
-> permitRootLogin yes
-
+```shell
+PasswordAuthentication yes
+permitRootLogin yes
 esc 输入:wq 保存
+```
 
 ### 重启 sshd 服务
 
-```
+```shell
 // 查看是否启动
 systemctl status sshd.service
 // 启动
