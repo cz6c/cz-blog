@@ -13,6 +13,18 @@ wget -O install.sh https://download.bt.cn/install/install-ubuntu_6.0.sh && sudo 
 
 应用市场安装插件 `pm2`、 `mysql`、 `nginx`
 
+常用命令
+```shell
+# 查看端口使用情况
+netstat -ntlp
+
+# 查看所有进程
+ps -ef
+
+# 强制、尽快终止进程
+kill -9 pid
+```
+
 ## 部署web 配置 nginx
 
 部署前端项目时，要先在宝塔网站上添加一个站点，并把站点的域名配置好
@@ -96,7 +108,164 @@ wget -O install.sh https://download.bt.cn/install/install-ubuntu_6.0.sh && sudo 
 
 ### 添加项目
 
-项目启动文件填 npm，把项目运行脚本改为 nppm run start
+#### 终端添加
+
+1. cd到项目目录，安装项目依赖
+
+```shell
+npm install
+```
+
+2. 配置环境变量
+
+生成配置文件 `ecosystem.config.js`
+```shell
+pm2 ecosystem
+```
+常见配置如下
+```js
+module.exports = {
+  apps: [
+    {
+      // 应用程序名称
+      name: "cz-app",
+      // 执行文件
+      script: "./src/app.ts",
+      // 是否启用监控模式，默认是false。如果设置成true，当应用程序变动时，pm2会自动重载。这里也可以设置你要监控的文件。
+      watch: true, // watch: './',
+      // 不用监听的文件
+      ignore_watch: ["node_modules", "logs"],
+      // 开发环境配置--env_dev
+      env_dev: {
+        NODE_ENV: "development",
+      },
+      // 测试环境配置--env_test
+      env_test: {
+        NODE_ENV: "test",
+      },
+      env: {
+        NODE_ENV: "production",
+      },
+      // 应用程序启动模式，这里设置的是 cluster_mode（集群），默认是fork
+      exec_mode: "cluster_mode",
+      // 应用启动实例个数，仅在cluster模式有效 默认为fork；或者 max
+      instances: 4,
+      // 最大内存限制数，超出自动重启
+      max_memory_restart: 8,
+      // 自定义应用程序的错误日志文件(错误日志文件)
+      error_file: "./logs/app-err.log",
+      // 自定义应用程序日志文件(正常日志文件)
+      out_file: "./logs/app-out.log",
+      // 设置追加日志而不是新建日志
+      merge_logs: true,
+      // 指定日志文件的时间格式
+      log_date_format: "YYYY-MM-DD HH:mm:ss",
+      // 最小运行时间，这里设置的是60s即如果应用程序在* 60s内退出，pm2会认为程序异常退出，此时触发重启* max_restarts设置数量，应用运行少于时间被认为是异常启动
+      min_uptime: "60s",
+      // 设置应用程序异常退出重启的次数，默认15次（从0开始计数）,最大异常重启次数，即小于min_uptime运行时间重启次数；
+      max_restarts: 10,
+      // 异常重启情况下，延时重启时间
+      restart_delay: "60s",
+    },
+  ],
+
+  // 环境部署
+  deploy: {
+    // 生成环境
+    // 1、上传代码到云端仓库
+    // 2、部署命令预览：
+    // 首次部署: $ pm2 deploy ecosystem.json production setup
+    // 更新版本: $ pm2 deploy ecosystem.json production update
+    // 返回上一个版本: $ pm2 deploy ecosystem.json production revert 1
+    // 3、执行首次部署：$ pm2 deploy ecosystem.json production setup
+    // 4、执行部署运行：$ pm2 deploy ecosystem.json production
+    // 5、看到 success 成功，报错看错误自行百度
+    production: {
+      // ssh的用户名，登录远程服务器的用户名
+      user: "dzm",
+      // 要发布的机器，远程服务器的IP或hostname，此处可以是数组同步部署多个服务器
+      host: "10.0.90.164",
+      // 要发布的代码分支，远端名称及分支名
+      ref: "origin/master",
+      // 代码Git仓库地址
+      repo: "git@gitlab.dzm.net:dzm/nuxt-test",
+      // 服务器存储代码地址，远程服务器部署目录
+      path: "/usr/local/var/www/production",
+      // ssh权限配置
+      ssh_options: ["StrictHostKeyChecking=no", "PasswordAuthentication=no"],
+      // 1、在 setup 前触发，如安装 git
+      "pre-setup": "",
+      // 2、在 setup 后触发，如做一些其他配置
+      "post-setup": "",
+      // 3、在 deploy 前触发，执行本地脚本
+      "pre-deploy-local": "",
+      // 4、在 deploy 前触发，执行远程脚本
+      "pre-deploy": "git fetch --all",
+      // 5、在 deploy 后触发，执行远程脚本，如 npm install，部署后需要执行的命令
+      "post-deploy":
+        "npm install && pm2 reload ecosystem.config.js --env production",
+      // 环境变量
+      env: {
+        // 指定为生成环境
+        NODE_ENV: "production",
+      },
+    },
+  },
+};
+```
+
+3. 启动项目
+
+```shell
+# 启动测试环境
+pm2 start ecosystem.config.js --env development
+
+# 启动正式环境
+pm2 start ecosystem.config.js --env production
+
+# 脚本启动
+pm2 start "npm run start"
+```
+
+::: tip pm2启动ts项目报错 ts-node 问题
+1. cd 到pm2目录下安装依赖 
+2. npm install typescript ts-node
+3. cd 回项目目录启动
+:::
+
+1. 常用命令
+
+```shell
+# 查看服务列表
+pm2 ls
+
+# 实时显示日志
+pm2 logs
+
+# 终端的实时仪表板
+pm2 monit
+
+# 查看单个项目详情
+pm2 show app_name
+
+# 重启
+pm2 restart app_name
+
+# 热重启
+pm2 reload app_name
+
+## 暂停
+pm2 stop app_name
+
+# 删除
+pm2 delete app_name
+
+# 切换环境变量
+NODE_ENV=production pm2 restart app_name --update-env
+```
+
+#### 面板添加
+
 端口号为项目代码中监听的端口号，并且需要需要开放（aws 和宝塔都需要配置）
 
 [![ppaEPg0.md.png](https://s1.ax1x.com/2023/03/21/ppaEPg0.md.png)](https://imgse.com/i/ppaEPg0)
@@ -117,17 +286,21 @@ wget -O install.sh https://download.bt.cn/install/install-ubuntu_6.0.sh && sudo 
 
 [![ppaEivV.md.png](https://s1.ax1x.com/2023/03/21/ppaEivV.md.png)](https://imgse.com/i/ppaEivV)
 
-### 使用 navicat premium 访问服务器数据库
+### navicat premium 访问服务器数据库
 
 [![ppaKiFS.md.png](https://s1.ax1x.com/2023/03/21/ppaKiFS.md.png)](https://imgse.com/i/ppaKiFS)
 
-如果出现 10060 连接问题：
+#### 出现 10060 连接问题：
 
 1. `mysql -u root -p` 登录 mysql 输入密码
 2. `SELECT host,user FROM mysql.user;` 查询用户允许访问状态
 3. `GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'yuor_password' WITH GRANT OPTION;` 把 root 允许访问权限设置为全部 %
 4. `flush privileges;` 更新权限表
 5. `DELETE FROM `user` WHERE Host='10.155.123.55' AND User='kaka';` 删除时使用这个
+
+#### 出现没有权限访问问题
+
+[![p93gZPf.md.png](https://s1.ax1x.com/2023/04/30/p93gZPf.md.png)](https://imgse.com/i/p93gZPf)
 
 ### 跨域问题
 
