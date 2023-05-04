@@ -57,6 +57,16 @@ export default {
         },
       ],
     },
+    {
+      text: "数据库",
+      collapsed: false,
+      items: [
+        {
+          text: "NavicatPremium16 破解版",
+          link: "/server/bd/navicatPremium",
+        },
+      ],
+    },
   ],
   "/plugin/": [
     {

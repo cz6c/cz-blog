@@ -5,6 +5,11 @@
 
 ## 安装 express-jwt、jsonwebtoken
 
+各个包的作用
+
+- express-jwt: express认证token中间件，可配置密钥，自定义认证方法，白名单等
+- jsonwebtoken: 生成token|，解析token
+
 ```shell
 npm i express-jwt
 npm i jsonwebtoken

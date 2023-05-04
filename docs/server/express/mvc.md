@@ -15,7 +15,7 @@ View 可以了解在数据 Model 上发生的改变。（比如：观察者模�
 - 控制器（Controller）起到不同层面间的组织作用，用于控制应用程序的流程。它处理事件并作出响应。“事件”包括用户的行为和数据 Model 上的改变。
 
 
-## 基于mvc模型封装，
+## 基于mvc模型封装
 
 将在src 目录下，创建controllers， models，routes三个文件夹目录
 
@@ -55,15 +55,16 @@ export default db;
 验数据库是否连接成功在 app.ts 文件中，写入以下代码，运行项目在控制台看结果
 
 ```ts
-// 验证数据库是否连接成功
-app.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    await db.authenticate();
+import db from "./db";
+
+// 数据库连接成功处理
+db.authenticate()
+  .then(async () => {
     console.log("Connection has been established successfully.");
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
-});
+  })
+  .catch(err => {
+    console.error("Unable to connect to the database:", err);
+  });
 ```
 
 创建数据库映射模型，以 user 模块为例，在 models 目录下创建 user.ts 文件，
@@ -103,20 +104,56 @@ export default UserModel;
 
 ```ts
 import { Request, Response, NextFunction } from "express";
-import { CODE_SUCCESS } from "../utils/constant";
+import { getToken, encode, resultSuccess, resultPageSuccess } from "../utils/result";
 import UserModel from "../models/users";
+import { Op } from "sequelize";
 
 export default class userController {
+  public static async info(req: Request, res: Response, next: NextFunction) {
+    const token = getToken(req);
+    const jwtPayload = encode(token);
+    try {
+      const item = await UserModel.findAll({
+        attributes: { exclude: ["password"] }, //过滤掉password字段
+        where: {
+          id: jwtPayload.id,
+        },
+      });
+      if (!item[0]) {
+        next(new Error("用户不存在"));
+      } else {
+        res.json(resultSuccess(item[0]));
+      }
+    } catch (err: any) {
+      console.log(err);
+      next(new Error(err));
+    }
+  }
 
   public static async list(req: Request, res: Response, next: NextFunction) {
+    // 查询参数处理
+    let params: any = { status: 1 };
+    const username = req.query.username;
+    if (username) {
+      params.username = {
+        [Op.like]: `%${username}%`,
+      };
+    }
     try {
-      const list = await UserModel.findAll();
-      res.json({
-        code: CODE_SUCCESS,
-        msg: "success",
-        data: list,
+      const total = await UserModel.count({ where: params });
+      const list = await UserModel.findAll({
+        attributes: { exclude: ["password"] }, //过滤掉password字段
+        where: params,
       });
-    } catch (err) {
+      // 分页参数处理
+      const limit = Number(req.query.limit);
+      const page = Number(req.query.page);
+      if (limit && page) {
+        res.json(resultPageSuccess({ list, page, limit, total }));
+      } else {
+        res.json(resultSuccess({ list, total }));
+      }
+    } catch (err: any) {
       console.log(err);
       next(new Error(err));
     }
@@ -125,11 +162,8 @@ export default class userController {
   public static async create(req: Request, res: Response, next: NextFunction) {
     try {
       await UserModel.create(req.body);
-      res.json({
-        code: CODE_SUCCESS,
-        msg: "success",
-      });
-    } catch (err) {
+      res.json(resultSuccess(null));
+    } catch (err: any) {
       console.log(err);
       next(new Error(err));
     }
@@ -142,11 +176,8 @@ export default class userController {
           id: req.body.id,
         },
       });
-      res.json({
-        code: CODE_SUCCESS,
-        msg: "success",
-      });
-    } catch (err) {
+      res.json(resultSuccess(null));
+    } catch (err: any) {
       console.log(err);
       next(new Error(err));
     }
@@ -154,16 +185,16 @@ export default class userController {
 
   public static async destroy(req: Request, res: Response, next: NextFunction) {
     try {
-      await UserModel.destroy({
-        where: {
-          id: req.body.id,
+      await UserModel.update(
+        { status: 2 },
+        {
+          where: {
+            id: req.body.id,
+          },
         },
-      });
-      res.json({
-        code: CODE_SUCCESS,
-        msg: "success",
-      });
-    } catch (err) {
+      );
+      res.json(resultSuccess(null));
+    } catch (err: any) {
       console.log(err);
       next(new Error(err));
     }
@@ -199,19 +230,24 @@ export default router;
 
 ```ts
 import express from "express";
-import { CODE_ERROR, CODE_TOKEN_EXPIRED } from "../utils/constant";
+import { ConstantEnum } from "../utils/constant";
+import { resultError } from "../utils/result";
 import userRouter from "./modules/user";
+
 const router = express.Router();
 
-router.use("/api", userRouter); 
+router.use("/admin", userRouter);
 
 // 自定义统一异常处理中间件
-router.use((err, req, res, next) => {
+router.use((err: { name: string; message: any }, req: any, res: any, next: any) => {
   console.log("err===", err);
-  res.json({
-    code: err.name === "UnauthorizedError" ? CODE_TOKEN_EXPIRED : CODE_ERROR,
-    msg: err.message,
-  });
+  const code: number = err.name === "UnauthorizedError" ? ConstantEnum.CODE_TOKEN_EXPIRED : ConstantEnum.CODE_ERROR;
+  res.json(
+    resultError(null, {
+      code,
+      message: err.message,
+    }),
+  );
 });
 
 export default router;
@@ -246,19 +282,111 @@ app.listen(port, () => {
 ### utlis 下 constant.ts 代码如下
 
 ```ts
-const CODE_ERROR = 400; // 请求响应失败c
-const CODE_SUCCESS = 200; // 请求响应成功
-const CODE_TOKEN_EXPIRED = 401; // 授权失败
-const PRIVATE_KEY = "cz6"; // 自定义jwt加密的私钥
-const JWT_EXPIRED = 60 * 60 * 6; // 过期时间6小时
+export enum ConstantEnum {
+  CODE_ERROR = 400, // 请求响应失败c
+  CODE_SUCCESS = 200, // 请求响应成功
+  CODE_TOKEN_EXPIRED = 401, // 授权失败
+  JWT_PRIVATE_KEY = "cz6", // 自定义jwt加密的私钥
+  JWT_EXPIRED = "6d", // 过期时间6小时
+  JWT_TOKEN_KEY = "ctoken", // 请求头携带token的键名
+}
+```
 
-export {
-  CODE_ERROR,
-  CODE_SUCCESS,
-  CODE_TOKEN_EXPIRED,
-  PRIVATE_KEY,
-  JWT_EXPIRED,
-};
+### 
+
+```ts
+import { ConstantEnum } from "./constant";
+import jsonwebtoken from "jsonwebtoken";
+import { Request } from "express";
+
+interface RequestInfo<T> {
+  data: T;
+  code: Number;
+  message: string;
+}
+
+/**
+ * @description: 处理成功
+ * @return {*}
+ */
+export function resultSuccess<T>(
+  data: T,
+  { code = ConstantEnum.CODE_SUCCESS as number, message = "Request Success" } = {},
+): RequestInfo<T> {
+  return {
+    data,
+    code,
+    message,
+  };
+}
+
+/**
+ * @description: 处理失败
+ * @return {*}
+ */
+export function resultError(
+  data = null,
+  { code = ConstantEnum.CODE_ERROR as Number, message = "Request Error" } = {},
+): RequestInfo<unknown> {
+  return {
+    data,
+    code,
+    message,
+  };
+}
+
+/**
+ * @description: 处理列表分页
+ * @param {number} page
+ * @param {number} limit
+ * @param {T} list
+ * @return {*}
+ */
+export function resultPageSuccess<T>(
+  { list, page, limit, total }: { list: T[]; page: number; limit: number; total: number },
+  { code = ConstantEnum.CODE_SUCCESS as number, message = "Request Success" } = {},
+): RequestInfo<unknown> {
+  const offset = (page - 1) * Number(limit);
+  const pageData =
+    offset + Number(limit) >= list.length
+      ? list.slice(offset, list.length)
+      : list.slice(offset, offset + Number(limit));
+  return {
+    ...resultSuccess(
+      {
+        list: pageData,
+        page,
+        limit,
+        total,
+      },
+      { code, message },
+    ),
+  };
+}
+
+/**
+ * @description: 获取token
+ * @param {Request} req
+ * @return {*}
+ */
+export function getToken(req: Request): string | undefined {
+  if (req.headers[ConstantEnum.JWT_TOKEN_KEY]) {
+    return req.headers[ConstantEnum.JWT_TOKEN_KEY] as string;
+  } else if (req.query && req.query.token) {
+    return req.query.token as string;
+  } else {
+    return undefined;
+  }
+}
+
+/**
+ * @description:  解析token
+ * @param {string | undefined} token
+ * @return {*}
+ */
+export function encode(token: string | undefined): jsonwebtoken.JwtPayload {
+  return jsonwebtoken.verify(token as string, ConstantEnum.JWT_PRIVATE_KEY) as jsonwebtoken.JwtPayload;
+}
 ```
 
 

@@ -37,7 +37,7 @@ wget -O install.sh https://download.bt.cn/install/install-ubuntu_6.0.sh && sudo 
             index index.html index.htm;
             #root   html;
             #index  index.html index.htm;
-            #try_files $uri $uri.html $uri/ /index.html; #这里是多页面访问配置，解决404错误
+            try_files $uri $uri.html $uri/ /index.html; #这里是多页面访问配置，解决404错误
         }
 
         error_page  404 /404.html;
@@ -72,7 +72,7 @@ wget -O install.sh https://download.bt.cn/install/install-ubuntu_6.0.sh && sudo 
             root /www/wwwroot/www.cz6hy9.top; #重点4,项目根路径，默认是nginx/html/
             #根索引文件，也就是输入ip或域名后在浏览器访问的第一页面
             index index.html index.htm;
-            #try_files $uri $uri.html $uri/ /index.html;#这里是多页面访问配置，解决404错误
+            try_files $uri $uri.html $uri/ /index.html;#这里是多页面访问配置，解决404错误
        }
 
         error_page 404 /404.html;

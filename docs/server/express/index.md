@@ -114,6 +114,115 @@ npm run serve
 
 服务器将在 3000端口 运行，应用程序运行的 URL 为http://localhost:3000。
 
+## 代码格式化 eslint prettier
+
+### eslint
+
+```shell
+npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
+```
+
+其中各个包的作用
+
+- eslint: eslint的核心包
+- @typescript-eslint/parser: 用于使eslint能够分析typescript代码
+- @typescript-eslint/eslint-plugin: 包含了一些常用的typescript代码规则
+
+在项目根目录下创建 .eslintrc.js 文件 并输入以下内容
+
+```js
+module.exports = {
+  root: true,
+  env: {
+    browser: true,
+    node: true,
+    es6: true,
+  },
+  parserOptions: {
+    ecmaVersion: 2020, // Allows for the parsing of modern ECMAScript features
+    parser: "@typescript-eslint/parser", // Specifies the ESLint parser
+    sourceType: "module", // Allows for the use of imports
+    ecmaFeatures: {
+      jsx: true, // Allows for the parsing of JSX
+    },
+  },
+  extends: [
+    "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+    "prettier/@typescript-eslint", // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
+    "plugin:prettier/recommended", // Enables eslint-plugin-prettier and eslint-config-prettier. This will display prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+  ],
+  rules: {},
+};
+```
+
+### 
+
+```shell
+npm install --save-dev prettier eslint-config-prettier eslint-plugin-prettier
+```
+
+各个包的作用
+
+- prettier: prettier的核心包
+- eslint-config-prettier: 禁用一些eslint的规则,防止与prettier冲突
+- eslint-plugin-prettier: 让prettier作为eslint的一些规则来运行
+
+然后在根目录下创建 .prettierrc.js 文件 内容如下
+
+```js
+module.exports = {
+  // 一行最多 120 字符
+  printWidth: 120,
+  // 使用 2 个空格缩进
+  tabWidth: 2,
+  // 不使用缩进符，而使用空格
+  useTabs: false,
+  // 行尾需要有分号
+  semi: true,
+  // 使用单引号
+  singleQuote: false,
+  // 对象的 key 仅在必要时用引号
+  quoteProps: "as-needed",
+  // jsx 不使用单引号，而使用双引号
+  jsxSingleQuote: false,
+  // 末尾需要有逗号
+  trailingComma: "all",
+  // 大括号内的首尾需要空格
+  bracketSpacing: true,
+  // jsx 标签的反尖括号需要换行
+  jsxBracketSameLine: false,
+  // 箭头函数，只有一个参数的时候，也需要括号
+  arrowParens: "avoid",
+  // 每个文件格式化的范围是文件的全部内容
+  rangeStart: 0,
+  rangeEnd: Infinity,
+  // 不需要写文件开头的 @prettier
+  requirePragma: false,
+  // 不需要自动在文件开头插入 @prettier
+  insertPragma: false,
+  // 使用默认的折行标准
+  proseWrap: "preserve",
+  // 根据显示样式决定 html 要不要折行
+  htmlWhitespaceSensitivity: "css",
+  endOfLine: "auto",
+};
+```
+
+在项目的package.json文件中,增加运行脚本
+
+```json
+{
+  "scripts": {
+    "lint:eslint": "eslint --fix",
+    "lint:prettier": "prettier --write  \"src/**/*.{ts,json,html,md}\""
+  }
+}
+```
+
+至此我们已经引入了eslint和prettier
+
+如果你想要自己个性化的一些规则,可以在.prettierrc.js和.eslintrc.js的rules字段中进行个性化的配置
+
 ## 配置常用的中间件
 
 ### 配置静态资源
