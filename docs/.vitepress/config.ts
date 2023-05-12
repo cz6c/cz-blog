@@ -14,7 +14,7 @@ export default defineConfig({
     nav: [
       { text: "前端", link: "/web/" },
       { text: "服务端", link: "/server/aws/" },
-      { text: "插件/库", link: "/plugin/" },
+      { text: "代码碎片", link: "/code/" },
     ],
     socialLinks: [
       { icon: "github", link: "https://github.com/cz6c" },

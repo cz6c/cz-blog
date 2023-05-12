@@ -1,4 +1,4 @@
-# 宝塔使用
+# 宝塔面板使用
 
 目录
 [[toc]]
@@ -108,8 +108,6 @@ kill -9 pid
 
 ### 添加项目
 
-#### 终端添加
-
 1. cd到项目目录，安装项目依赖
 
 ```shell
@@ -136,22 +134,24 @@ module.exports = {
       // 不用监听的文件
       ignore_watch: ["node_modules", "logs"],
       // 开发环境配置--env_dev
-      env_dev: {
+      env_development: {
         NODE_ENV: "development",
       },
-      // 测试环境配置--env_test
-      env_test: {
-        NODE_ENV: "test",
-      },
-      env: {
+      env_production: {
         NODE_ENV: "production",
       },
-      // 应用程序启动模式，这里设置的是 cluster_mode（集群），默认是fork
-      exec_mode: "cluster_mode",
+      // 应用程序启动模式，这里设置的是 cluster（集群），默认是fork
+      exec_mode: "cluster",
       // 应用启动实例个数，仅在cluster模式有效 默认为fork；或者 max
-      instances: 4,
+      instances: 2,
       // 最大内存限制数，超出自动重启
-      max_memory_restart: 8,
+      max_memory_restart: "500M",
+      // 最小运行时间，这里设置的是60s即如果应用程序在* 60s内退出，pm2会认为程序异常退出，此时触发重启* max_restarts设置数量，应用运行少于时间被认为是异常启动
+      min_uptime: "60s",
+      // 异常重启情况下，延时重启时间
+      restart_delay: 6000,
+      // 设置应用程序异常退出重启的次数，默认15次（从0开始计数）,最大异常重启次数，即小于min_uptime运行时间重启次数；
+      max_restarts: 6,
       // 自定义应用程序的错误日志文件(错误日志文件)
       error_file: "./logs/app-err.log",
       // 自定义应用程序日志文件(正常日志文件)
@@ -160,57 +160,8 @@ module.exports = {
       merge_logs: true,
       // 指定日志文件的时间格式
       log_date_format: "YYYY-MM-DD HH:mm:ss",
-      // 最小运行时间，这里设置的是60s即如果应用程序在* 60s内退出，pm2会认为程序异常退出，此时触发重启* max_restarts设置数量，应用运行少于时间被认为是异常启动
-      min_uptime: "60s",
-      // 设置应用程序异常退出重启的次数，默认15次（从0开始计数）,最大异常重启次数，即小于min_uptime运行时间重启次数；
-      max_restarts: 10,
-      // 异常重启情况下，延时重启时间
-      restart_delay: "60s",
     },
   ],
-
-  // 环境部署
-  deploy: {
-    // 生成环境
-    // 1、上传代码到云端仓库
-    // 2、部署命令预览：
-    // 首次部署: $ pm2 deploy ecosystem.json production setup
-    // 更新版本: $ pm2 deploy ecosystem.json production update
-    // 返回上一个版本: $ pm2 deploy ecosystem.json production revert 1
-    // 3、执行首次部署：$ pm2 deploy ecosystem.json production setup
-    // 4、执行部署运行：$ pm2 deploy ecosystem.json production
-    // 5、看到 success 成功，报错看错误自行百度
-    production: {
-      // ssh的用户名，登录远程服务器的用户名
-      user: "dzm",
-      // 要发布的机器，远程服务器的IP或hostname，此处可以是数组同步部署多个服务器
-      host: "10.0.90.164",
-      // 要发布的代码分支，远端名称及分支名
-      ref: "origin/master",
-      // 代码Git仓库地址
-      repo: "git@gitlab.dzm.net:dzm/nuxt-test",
-      // 服务器存储代码地址，远程服务器部署目录
-      path: "/usr/local/var/www/production",
-      // ssh权限配置
-      ssh_options: ["StrictHostKeyChecking=no", "PasswordAuthentication=no"],
-      // 1、在 setup 前触发，如安装 git
-      "pre-setup": "",
-      // 2、在 setup 后触发，如做一些其他配置
-      "post-setup": "",
-      // 3、在 deploy 前触发，执行本地脚本
-      "pre-deploy-local": "",
-      // 4、在 deploy 前触发，执行远程脚本
-      "pre-deploy": "git fetch --all",
-      // 5、在 deploy 后触发，执行远程脚本，如 npm install，部署后需要执行的命令
-      "post-deploy":
-        "npm install && pm2 reload ecosystem.config.js --env production",
-      // 环境变量
-      env: {
-        // 指定为生成环境
-        NODE_ENV: "production",
-      },
-    },
-  },
 };
 ```
 
@@ -227,13 +178,13 @@ pm2 start ecosystem.config.js --env production
 pm2 start "npm run start"
 ```
 
-::: tip pm2启动ts项目报错 ts-node 问题
+::: warning pm2启动ts项目报错 ts-node 问题
 1. cd 到pm2目录下安装依赖 
 2. npm install typescript ts-node
 3. cd 回项目目录启动
 :::
 
-1. 常用命令
+常用命令
 
 ```shell
 # 查看服务列表
@@ -263,18 +214,6 @@ pm2 delete app_name
 # 切换环境变量
 NODE_ENV=production pm2 restart app_name --update-env
 ```
-
-#### 面板添加
-
-端口号为项目代码中监听的端口号，并且需要需要开放（aws 和宝塔都需要配置）
-
-[![ppaEPg0.md.png](https://s1.ax1x.com/2023/03/21/ppaEPg0.md.png)](https://imgse.com/i/ppaEPg0)
-
-直接在 pm2 中设置映射
-
-[![ppdK524.md.png](https://s1.ax1x.com/2023/03/22/ppdK524.md.png)](https://imgse.com/i/ppdK524)
-[![ppdKhPU.md.png](https://s1.ax1x.com/2023/03/22/ppdKhPU.md.png)](https://imgse.com/i/ppdKhPU)
-[![ppdK4GF.md.png](https://s1.ax1x.com/2023/03/22/ppdK4GF.md.png)](https://imgse.com/i/ppdK4GF)
 
 ### 添加数据库
 
@@ -306,7 +245,7 @@ NODE_ENV=production pm2 restart app_name --update-env
 
 >Access to XMLHttpRequest at 'http://35.76.99.97:9999/user/info' from origin 'http://35.76.99.97' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'. The credentials mode of requests initiated by the XMLHttpRequest is controlled by the withCredentials attribute.
 
-:::tip withCredentials 设置跨域访问时是否携带 cookie 等信息
+:::warning withCredentials 设置跨域访问时是否携带 cookie 等信息
 `experss` 中使用 `cors` 中间件对跨域进行了处理，默认把 `Access-Control-Allow-Origin` 设置为 `*`
 
 `withCredentials` 设置为 true 时， `Access-Control-Allow-Origin` 不能设置为 `*`，必须指定域名

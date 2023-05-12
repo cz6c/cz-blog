@@ -1,9 +1,82 @@
-# Linux 安装插件/应用
+# Linux 环境配置
 
 目录
 [[toc]]
 
-## 安装 node、PM2
+## git
+
+### 安装
+
+使用yum安装
+
+```shell
+yum install git
+```
+
+初始化配置
+
+```shell
+git config --global user.name "cz" (git的用户名)
+git config --global user.email "chenzb961@163.com" (git的用户名邮箱)
+```
+
+### 使用shh链接git
+
+生成shh密钥
+
+```shell
+ssh-keygen -t rsa -C "chenzb961@163.com"
+```
+然后一路enter，成功后切换到ssh目录下 cd ~/.ssh/ 查看证书
+
+注意:这文件下的id_rsa 是私钥，id_rsa.pub表示公钥
+
+实现git和github的链接
+
+1. 首先登陆github，https://github.com/
+2. 登陆之后点击头像，点击Settings.
+3. 然后点击【SSH and GPG Keys】-----> 【New SSH Key】
+4. 然后填写SSH Key数据。名字（随便写），Key是公钥
+5. 使用命令 ssh git@github.com 来链接github，验证是否成功
+
+### git常见命令
+
+基本提交步骤
+
+```git
+git init                         //第一次配置：初始化本地仓库
+
+git pull 远程url   //每次提交前先拉取一下
+git status         //查看文件状态
+git add .          //添加所有文件到暂存区  add 文件名    添加指定文件
+git commit -m xxx  //提交当前分支     -o 文件名 -m xxx  提交指定文件
+
+git remote add origin 远程url   //第一次配置：远程仓库别名
+git push -u origin             //第一次配置：下次提交可以直接给push
+
+git push           //提交
+
+git log            //查看提交记录
+```
+
+开发到一半需要切换分支，先复制，回到分支在粘贴即可
+
+```git
+git stash       //复制
+git stash pop   //粘贴
+```
+
+分支命令
+
+```git
+git branch        //查看所有分支
+git branch xxx    //创建xxx分支   -b xxx 创建并切换到xxx分支
+git checkout xxx  //切换到xxx分支
+git merge xxx     //把xxx分支和当前所在分支合并
+git branch -d xxx //删除xxx分支
+```
+
+## node、PM2
 
 ### 安装 node
 
@@ -46,7 +119,7 @@ ln -sf /usr/node/bin/pm2 /usr/local/bin/
 pm2 ls
 ```
 
-## Nginx 安装与配置
+## Nginx 
 
 ### 安装 Nginx
 

@@ -155,7 +155,7 @@ module.exports = {
 };
 ```
 
-### 
+### prettier
 
 ```shell
 npm install --save-dev prettier eslint-config-prettier eslint-plugin-prettier
