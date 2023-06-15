@@ -1,12 +1,12 @@
 export default {
   "/web/": [
     {
-      text: "基础知识库",
+      text: "基础知识",
       items: [
-        { text: "面经", link: "/web/" },
-        { text: "H5兼容性", link: "/web/h5" },
-        { text: "javaScript", link: "/web/javaScript/" },
-        { text: "css", link: "/web/css/" },
+        { text: "面经", link: "/web/base/" },
+        { text: "H5兼容性", link: "/web/base/h5" },
+        { text: "javaScript", link: "/web/base/javaScript" },
+        { text: "css", link: "/web/base/css" },
       ],
     },
     {
@@ -30,6 +30,13 @@ export default {
       items: [
         { text: "ApiCloud创建应用", link: "/web/apicloud/" },
         { text: "ApiCloud开发实践", link: "/web/apicloud/case" },
+      ],
+    },
+    {
+      text: "Flutter",
+      items: [
+        { text: "flutter", link: "/web/flutter/" },
+        { text: "getx", link: "/web/flutter/getx" },
       ],
     },
   ],
