@@ -28,8 +28,8 @@ export default {
     {
       text: "ApiCloud",
       items: [
-        { text: "ApiCloud创建应用", link: "/web/apicloud/" },
-        { text: "ApiCloud开发实践", link: "/web/apicloud/case" },
+        { text: "创建应用", link: "/web/apicloud/" },
+        { text: "开发实践", link: "/web/apicloud/case" },
       ],
     },
     {
