@@ -43,7 +43,7 @@ ssh-keygen -t rsa -C "chenzb961@163.com"
 
 基本提交步骤
 
-```git
+```shell
 git init                         //第一次配置：初始化本地仓库
 
 git pull 远程url   //每次提交前先拉取一下
@@ -61,14 +61,14 @@ git log            //查看提交记录
 
 开发到一半需要切换分支，先复制，回到分支在粘贴即可
 
-```git
+```shell
 git stash       //复制
 git stash pop   //粘贴
 ```
 
 分支命令
 
-```git
+```shell
 git branch        //查看所有分支
 git branch xxx    //创建xxx分支   -b xxx 创建并切换到xxx分支
 git checkout xxx  //切换到xxx分支

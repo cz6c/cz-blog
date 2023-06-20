@@ -1,31 +1,32 @@
 # Getx
 
-GetX 是 Flutter 上的一个轻量且强大的解决方案：高性能的状态管理、智能的依赖注入和便捷的路由管理。并且把逻辑代码和视图进行了分离，
+GetX 提供高性能的状态管理、智能的依赖注入和便捷的路由管理，并且把逻辑代码和视图进行了分离。是 Flutter 一个轻量且强大的状态解决方案。
 
 目录
 [[toc]]
 
 ## 1. 安装
-将 Get 添加到你的 pubspec.yaml 文件中。
+
+添加到你的 pubspec.yaml 文件中。
 
 ```yaml
 dependencies:
   get: ^4.6.5
 ```
 
-在需要用到的文件中导入，它将被使用。
+在需要用到的文件中导入。
 
 ```dart
 import 'package:get/get.dart';
 ```
 
-## 2. getx的三大功能
+## 2. GetX的三大功能
 
-### 2.1 状态管理，
+### 2.1 状态管理
 
-体验GetX的状态管理，基于GetX重写之前实现的计数器，
+基于GetX重写之前实现的计数器
 
-创建你的业务逻辑类，并将所有的变量，方法和控制器放在里面。 你可以使用一个简单的".obs "使任何变量成为可观察的。
+创建你的业务逻辑类，并将所有的变量，方法和控制器放在里面，可以使用".obs "使任何变量成响应的。
 
 controller.dart
 ```dart
@@ -35,7 +36,7 @@ class Controller extends GetxController{
 }
 ```
 
-在视图上我们想响应性的使用控制器中可观察的变量，需要使用 Obx(() =>Widget) 来包裹Widget。
+在视图上需要使用 Obx(() =>Widget) 来包裹Widget。
 
 main.dart
 ```dart
@@ -129,7 +130,7 @@ Get.put<S>(
 )
 ```
 
-####  2.2.2 `Get.lazyPut`：可以懒加载一个依赖，这样它只有在使用时才会被实例化。
+####  2.2.2 `Get.lazyPut`：懒加载一个依赖，只有在使用时才会被实例化。
 
 ```dart
 ///只有当第一次使用Get.find<ApiMock>时，ApiMock才会被调用。
@@ -239,7 +240,7 @@ Get.toNamed("/NextScreen", arguments: 'Get is the best');
 print(Get.arguments);//print out: Get is the best
 ```
 
-Get提供高级动态URL，就像在Web上一样。
+高级动态URL，就像在Web上一样。
 
 ```dart
 Get.offAllNamed("/NextScreen?device=phone&id=354&name=Enzo");
@@ -263,7 +264,7 @@ class HomeBinding implements Bindings {
 }
 ```
 
-你将使用该 Binding 来建立路由管理器、依赖关系和状态之间的连接。
+使用该 Binding 来建立路由管理器、依赖关系和状态之间的连接。Binding类在调用路由时被调用，
 
 ```dart
 getPages: [
@@ -275,7 +276,7 @@ getPages: [
 ];
 ```
 
-Binding类在调用路由时被调用，你可以在你的GetMaterialApp中创建一个 "initialBinding "来插入所有将要创建的依赖关系。
+你可以在你的GetMaterialApp中创建一个 "initialBinding "来插入所有将要创建的依赖关系。
 
 ```dart
 GetMaterialApp(

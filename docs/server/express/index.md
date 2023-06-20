@@ -112,7 +112,7 @@ npm i -D nodemon
 npm run serve
 ```
 
-服务器将在 3000端口 运行，应用程序运行的 URL 为http://localhost:3000。
+服务器将在 3000端口 运行，应用程序运行的 URL 为`http://localhost:3000`。
 
 ## 代码格式化 eslint prettier
 
