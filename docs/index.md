@@ -11,7 +11,7 @@ hero:
   actions:
     - theme: brand
       text: Start
-      link: /web/
+      link: /web/base/
 
 features:
   - icon: ⚡️
@@ -20,9 +20,6 @@ features:
   - icon: 📦
     title: 服务端
     details: Node.js, Koa 2, Express, Mysql, Sequelize, Nginx
-  # - icon: 🛠️
-  #   title: 组件
-  #   details: vue-cobweb, vue-cobweb-app
   - icon: 🔧
     title: 工具
     details: project-general-tools

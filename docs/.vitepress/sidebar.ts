@@ -4,16 +4,10 @@ export default {
       text: "基础知识",
       items: [
         { text: "面经", link: "/web/base/" },
-        { text: "H5兼容性", link: "/web/base/h5" },
+        { text: "移动端H5兼容性", link: "/web/base/h5" },
         { text: "javaScript", link: "/web/base/javaScript" },
-        { text: "css", link: "/web/base/css" },
-      ],
-    },
-    {
-      text: "插件/库",
-      items: [
-        { text: "业务组件库", link: "/web/plugin/component" },
-        { text: "功能库", link: "/web/plugin/" },
+        { text: "css 常用技巧", link: "/web/base/css" },
+        { text: "flex 弹性布局", link: "/web/base/flex" },
       ],
     },
     {
@@ -26,17 +20,12 @@ export default {
       ],
     },
     {
-      text: "ApiCloud",
+      text: "混合APP开发",
       items: [
-        { text: "创建应用", link: "/web/apicloud/" },
-        { text: "开发实践", link: "/web/apicloud/case" },
-      ],
-    },
-    {
-      text: "Flutter",
-      items: [
-        { text: "flutter", link: "/web/flutter/" },
-        { text: "getx", link: "/web/flutter/getx" },
+        { text: "创建第一个ApiCloud应用", link: "/web/apicloud/" },
+        { text: "ApiCloud开发实践", link: "/web/apicloud/case" },
+        { text: "创建第一个flutter项目", link: "/web/flutter/" },
+        { text: "flutter状态管理-Getx", link: "/web/flutter/getx" },
       ],
     },
   ],
@@ -76,5 +65,4 @@ export default {
       ],
     },
   ],
-  "/code/": [{ text: "代码碎片", link: "/code/" }],
 };

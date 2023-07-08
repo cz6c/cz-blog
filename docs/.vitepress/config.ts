@@ -14,6 +14,7 @@ export default defineConfig({
     nav: [
       { text: "前端", link: "/web/base/" },
       { text: "服务端", link: "/server/aws/" },
+      { text: "工具", link: "/plugin/" },
       { text: "代码碎片", link: "/code/" },
     ],
     socialLinks: [
