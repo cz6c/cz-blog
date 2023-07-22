@@ -12,10 +12,21 @@ export default defineConfig({
   ignoreDeadLinks: true, //解决 VitePress 在构建时不会因为死链接而导致构建失败。
   themeConfig: {
     nav: [
-      { text: "前端", link: "/web/base/" },
-      { text: "服务端", link: "/server/aws/" },
-      { text: "工具", link: "/plugin/" },
-      { text: "代码碎片", link: "/code/" },
+      {
+        text: "项目",
+        items: [
+          { text: "vue-cz-admin", link: "/product/admin/" },
+          { text: "cz-express-server", link: "/product/express/" },
+        ],
+      },
+      {
+        text: "代码碎片",
+        items: [
+          { text: "前端", link: "/code/web/base/" },
+          { text: "服务端", link: "/code/server/" },
+          { text: "工具", link: "/code/plugin/" },
+        ],
+      },
     ],
     socialLinks: [
       { icon: "github", link: "https://github.com/cz6c" },
