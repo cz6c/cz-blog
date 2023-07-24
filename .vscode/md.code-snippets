@@ -1,0 +1,41 @@
+{
+  "链接": {
+    "prefix": ".md",
+    "body": ["[$1]($2)"],
+    "description": "链接"
+  },
+  "图片": {
+    "prefix": ".md",
+    "body": ["[![$1](https://s1.ax1x.com/2023/04/24/p9mLIzT.png)]()"],
+    "description": "图片"
+  },
+  "目录": {
+    "prefix": ".md",
+    "body": ["[[toc]]", "$1", ":::"],
+    "description": "目录"
+  },
+  "tip": {
+    "prefix": ".md",
+    "body": ["::: tip $1", "$2", ":::"],
+    "description": "tip"
+  },
+  "warning": {
+    "prefix": ".md",
+    "body": ["::: warning $1", "$2", ":::"],
+    "description": "warning"
+  },
+  "danger": {
+    "prefix": ".md",
+    "body": ["::: danger $1", "$2", ":::"],
+    "description": "danger"
+  },
+  "table": {
+    "prefix": ".md",
+    "body": [
+      "| Tables        | Are           | Cool  |",
+      "| ------------- |:-------------:| -----:|",
+      "| col 3 is      | right-aligned | $1600 |"
+    ],
+    "description": "table"
+  }
+}

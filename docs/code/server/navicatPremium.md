@@ -2,7 +2,6 @@
 
 Navicat premium是一款数据库管理工具,是一个可多重连线资料库的管理工具，它可以让你以单一程式同时连线到 MySQL、SQLite、Oracle 及 PostgreSQL 资料库，让管理不同类型的资料库更加的方便。
 
-目录
 [[toc]]
 
 ## 前往Navicat官网下载16的版本

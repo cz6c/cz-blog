@@ -1,6 +1,5 @@
 # Javascript
 
-目录
 [[toc]]
 
 ## 数组操作

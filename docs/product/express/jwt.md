@@ -1,6 +1,5 @@
 # 配置jwt鉴权
 
-目录
 [[toc]]
 
 ## 安装 express-jwt、jsonwebtoken

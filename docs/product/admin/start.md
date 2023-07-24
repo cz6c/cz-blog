@@ -1,8 +1,5 @@
 # 开始
 
-目录
-[[toc]]
-
 ## 准备
 
 - [node](http://nodejs.org/) 和 [git](https://git-scm.com/) -项目开发环境，node版本建议`v16.18.1`以上

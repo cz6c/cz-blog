@@ -4,7 +4,6 @@ Flutter 是一个用于构建跨平台应用的框架，它使用 Dart 编程语
 
 在 Web 和 Flutter 的布局基础条件中， 布局限制、widget 的大小确定和定位 是重要的区别之一。想要了解更多，你可以阅读 [样式书写指南](https://flutter.cn/docs/get-started/flutter-for/web-devs)。
 
-目录
 [[toc]]
 
 ## 1. 在 Windows 上安装和配置 Flutter 开发环境
