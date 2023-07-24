@@ -2,7 +2,7 @@ import { defineConfig } from "vitepress";
 import sidebar from "./sidebar";
 
 export default defineConfig({
-  // ...
+  head: [["link", { rel: "icon", href: "/favicon.ico" }]],
   title: "cz-blog",
   description: "Vite & Vue powered static site generator.",
   lastUpdated: true,
