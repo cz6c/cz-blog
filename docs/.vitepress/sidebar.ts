@@ -22,6 +22,10 @@ export default {
           text: "路由",
           link: "/product/admin/router",
         },
+        {
+          text: "权限",
+          link: "/product/admin/auth",
+        },
       ],
     },
   ],
