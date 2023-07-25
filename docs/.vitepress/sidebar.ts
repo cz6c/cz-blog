@@ -26,6 +26,10 @@ export default {
           text: "权限",
           link: "/product/admin/auth",
         },
+        {
+          text: "接口请求",
+          link: "/product/admin/request",
+        },
       ],
     },
   ],
