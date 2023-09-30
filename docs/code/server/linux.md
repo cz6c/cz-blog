@@ -75,9 +75,9 @@ git merge xxx     //把xxx分支和当前所在分支合并
 git branch -d xxx //删除xxx分支
 ```
 
-## node、PM2
 
-### 安装 node
+
+## 安装 node
 
 ```shell
 wget https://nodejs.org/dist/v14.16.0/node-v14.16.0-linux-x64.tar.xz
@@ -100,7 +100,7 @@ ln -s /usr/node/bin/npm /usr/local/bin/
 
 此时就可以使用 node npm 命令了
 
-### 安装 PM2
+## 安装 PM2
 
 ```shell
 npm install pm2 -g
@@ -116,6 +116,125 @@ ln -sf /usr/node/bin/pm2 /usr/local/bin/
 
 ```shell
 pm2 ls
+```
+
+### pm2 部署 experss
+
+#### 上传项目代码
+
+在文件中上传项目代码 一般放在 www/wwwroot 目录下
+
+#### 添加项目
+
+1. cd到项目目录，安装项目依赖
+
+```shell
+npm install
+```
+
+2. 配置环境变量
+
+生成配置文件 `ecosystem.config.js`
+```shell
+pm2 ecosystem
+```
+常见配置如下
+```js
+module.exports = {
+  apps: [
+    {
+      // 应用程序名称
+      name: "cz-app",
+      // 执行文件
+      script: "./src/app.ts",
+      // 是否启用监控模式，默认是false。如果设置成true，当应用程序变动时，pm2会自动重载。这里也可以设置你要监控的文件。
+      watch: true, // watch: './',
+      // 不用监听的文件
+      ignore_watch: ["node_modules", "logs"],
+      // 开发环境配置--env_dev
+      env_development: {
+        NODE_ENV: "development",
+      },
+      env_production: {
+        NODE_ENV: "production",
+      },
+      // 应用程序启动模式，这里设置的是 cluster（集群），默认是fork
+      exec_mode: "cluster",
+      // 应用启动实例个数，仅在cluster模式有效 默认为fork；或者 max
+      instances: 2,
+      // 最大内存限制数，超出自动重启
+      max_memory_restart: "500M",
+      // 最小运行时间，这里设置的是60s即如果应用程序在* 60s内退出，pm2会认为程序异常退出，此时触发重启* max_restarts设置数量，应用运行少于时间被认为是异常启动
+      min_uptime: "60s",
+      // 异常重启情况下，延时重启时间
+      restart_delay: 6000,
+      // 设置应用程序异常退出重启的次数，默认15次（从0开始计数）,最大异常重启次数，即小于min_uptime运行时间重启次数；
+      max_restarts: 6,
+      // 自定义应用程序的错误日志文件(错误日志文件)
+      error_file: "./logs/app-err.log",
+      // 自定义应用程序日志文件(正常日志文件)
+      out_file: "./logs/app-out.log",
+      // 设置追加日志而不是新建日志
+      merge_logs: true,
+      // 指定日志文件的时间格式
+      log_date_format: "YYYY-MM-DD HH:mm:ss",
+    },
+  ],
+};
+```
+
+3. 启动项目
+
+```shell
+# 启动测试环境
+pm2 start ecosystem.config.js --env development
+
+# 启动正式环境
+pm2 start ecosystem.config.js --env production
+
+# 脚本启动
+pm2 start "npm run start"
+```
+
+::: warning pm2启动ts项目报错 ts-node 问题
+[PM2][WARN] Applications cz-app not running, starting...
+[PM2][ERROR] Error: Interpreter /www/server/nvm/versions/node/v16.18.1/lib/node_modules/pm2/node_modules/.bin/ts-node is NOT AVAILABLE in PATH. (type 'which /www/server/nvm/versions/node/v16.18.1/lib/node_modules/pm2/node_modules/.bin/ts-node' to double check.)
+ ELIFECYCLE  Command failed with exit code 1.
+:::
+
+1. cd 到pm2目录下安装依赖 
+2. npm install typescript ts-node
+3. cd 回项目目录启动
+
+常用命令
+
+```shell
+# 查看服务列表
+pm2 ls
+
+# 实时显示日志
+pm2 logs
+
+# 终端的实时仪表板
+pm2 monit
+
+# 查看单个项目详情
+pm2 show app_name
+
+# 重启
+pm2 restart app_name
+
+# 热重启
+pm2 reload app_name
+
+## 暂停
+pm2 stop app_name
+
+# 删除
+pm2 delete app_name
+
+# 切换环境变量
+NODE_ENV=production pm2 restart app_name --update-env
 ```
 
 ## Nginx 
